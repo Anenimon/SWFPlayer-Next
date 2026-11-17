@@ -30,6 +30,28 @@ jobs:
               \( -name psp-config -o -name build.mak \) \
               -print 2>/dev/null
           '
+
+      - name: Preparar dependencias
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/src" \
+            -w /src \
+            pspdev/pspdev:latest \
+            sh -lc '
+              export PATH="$PSPDEV/bin:$PATH"
+
+              echo "=== Instalando SDL_mixer ==="
+              psp-pacman -Sy --noconfirm sdl-mixer
+
+              echo "=== Procurando gameswf.h ==="
+              find Source/GameSWF -iname "gameswf.h" -print
+
+              echo "=== Procurando SDL_mixer.h ==="
+              find "$PSPDEV" -iname "SDL_mixer.h" -print
+
+              echo "=== Estrutura GameSWF ==="
+              find Source/GameSWF -maxdepth 2 -type d -print
+            '
           
       - name: Compilar para PSP
         run: |
