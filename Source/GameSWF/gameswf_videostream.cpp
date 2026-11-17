@@ -16,7 +16,7 @@
 #include "CSWFFileHandler.h"
 #include "CFont.h"
 
-extern AVInputFormat	flv_iformat;			// From ffmpeg
+extern AVInputFormat	flv_demuxer;			// From ffmpeg
 
 namespace gameswf
 {
@@ -1902,7 +1902,7 @@ namespace gameswf
 			m_pCodec=avcodec_find_decoder( CODEC_ID_FLV1 );
 			m_pCodecCtx->width = m_width;
 			m_pCodecCtx->height = m_height;
-			m_pFormatCtx->iformat = &flv_iformat;
+			m_pFormatCtx->iformat = &flv_demuxer;
 			m_pFormatCtx->nb_streams = 1;
 
 			avcodec_open( m_pCodecCtx, m_pCodec );

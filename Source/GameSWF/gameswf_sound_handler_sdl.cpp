@@ -6,11 +6,11 @@
 // A gameswf::sound_handler that uses SDL_mixer for output
 
 
-#include "gameswf/gameswf.h"
+#include "gameswf.h"
 #include "base/container.h"
 #include "SDL_mixer.h"
-#include "gameswf/gameswf_log.h"
-#include "gameswf/gameswf_types.h"	// for IF_VERBOSE_* macros
+#include "gameswf_log.h"
+#include "gameswf_types.h"	// for IF_VERBOSE_* macros
 
 
 // Use SDL_mixer to handle gameswf sounds.

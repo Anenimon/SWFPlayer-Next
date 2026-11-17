@@ -4,7 +4,7 @@ name: Build SWFPlayer PSP
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, fix/psp-build-includes]
 
 jobs:
   build:

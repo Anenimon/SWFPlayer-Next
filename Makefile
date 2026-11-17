@@ -26,14 +26,12 @@ GAMESWF_DIR :=				$(SOURCE_DIR)/GameSWF
 TINY_XML_DIR :=				$(SOURCE_DIR)/TinyXML
 TINY_XML_INCLUDE_DIR :=		$(TINY_XML_DIR)
 
-SDL_INCLUDE_DIR :=			$(shell psp-config --pspdev-path)/psp/include/sdl
+SDL_INCLUDE_DIR :=			$(shell psp-config --pspdev-path)/psp/include/SDL
 
-FFMPEG_DIR :=				../../FFMpeg/trunk
-FFMPEG_LIB_DIR :=			$(FFMPEG_DIR)/libavformat \
+FFMPEG_DIR := ./third_party/ffmpeg
+FFMPEG_LIB_DIR := $(FFMPEG_DIR)/libavformat \
 							$(FFMPEG_DIR)/libavcodec \
-							$(FFMPEG_DIR)/libavutil \
-							$(FFMPEG_DIR)/ffplay_resample
-
+							$(FFMPEG_DIR)/libavutil
 #----------------------------------------------------------------------------
 #	Source to make
 #	--------------
@@ -160,8 +158,8 @@ EXTERN_LIBS :=				-ljpeg \
 							-lSDL \
 							-lmad \
 							-lavformat \
-							-lavutil \
-							-lavcodec \
+                                                     -lavcodec \
+                                                     -lavutil \
 							-lz
 
 LIBS :=						$(EXTERN_LIBS) \
@@ -193,7 +191,7 @@ CFLAGS :=					$(DEFINES) -O3 -G0 -g -Wall -funroll-loops -fstrict-aliasing -fsch
 CXXFLAGS :=					$(CFLAGS) -fno-exceptions -fno-rtti
 ASFLAGS :=					$(CFLAGS)
 
-LIBDIR :=					$(FFMPEG_DIR)
+LIBDIR := $(FFMPEG_LIB_DIR)
 
 LDFLAGS :=					
 
