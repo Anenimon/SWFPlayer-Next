@@ -14,6 +14,23 @@ jobs:
       - name: Baixar codigo
         uses: actions/checkout@v4
 
+
+      - name: Diagnosticar PSPDEV
+        run: |
+          docker run --rm pspdev/pspdev:latest sh -lc '
+            echo "=== PSPDEV ==="
+            echo "PSPDEV=$PSPDEV"
+            echo "PATH=$PATH"
+            echo "=== psp-config ==="
+            command -v psp-config || true
+            echo "=== bin ==="
+            ls -la /usr/local/pspdev/bin || true
+            echo "=== arquivos do SDK ==="
+            find /usr/local/pspdev \
+              \( -name psp-config -o -name build.mak \) \
+              -print 2>/dev/null
+          '
+          
       - name: Compilar para PSP
         run: |
           docker run --rm \
