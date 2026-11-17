@@ -37,7 +37,7 @@ jobs:
             -v "$GITHUB_WORKSPACE:/src" \
             -w /src \
             pspdev/pspdev:latest \
-            sh -lc "make -j2"
+            sh -lc 'export PATH="$PSPDEV/bin:$PATH"; make -j2'
 
       - name: Salvar executavel
         uses: actions/upload-artifact@v4
