@@ -4,7 +4,7 @@
 #
 include ../config.mak
 
-CFLAGS+=-I$(SRC_PATH)/libswscale -I$(SRC_PATH)/libavcodec
+CFLAGS+=-I$(SRC_PATH)/libswscale -I$(SRC_PATH)/libavcodec -I../libavutil
 
 OBJS= bitstream.o \
       utils.o \
