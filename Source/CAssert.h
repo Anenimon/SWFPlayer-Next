@@ -125,7 +125,7 @@ class CAssert
 		static bool		AssertMessage( const char * fmt, ... );
 
 		// Display an error code as a string
-		static void		DisplayErrorCode( int code );
+		static void		DisplayErrorCode( unsigned int code );
 };
 
 //**********************************************************************************

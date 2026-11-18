@@ -49,6 +49,10 @@
 #include "CMessageBox.h"
 #include "CConfigFile.h"
 
+#ifndef MAXPATHLEN
+#define MAXPATHLEN 1024
+#endif
+
 //**********************************************************************************
 //   Local Macros
 //**********************************************************************************
@@ -548,7 +552,7 @@ SceUID	CFrameWork::LoadModule( const CString & module, eModulePartition partitio
 //*************************************************************************************
 bool	CFrameWork::LoadAndStartModule( const CString & module, eModulePartition partition )
 {
-	s32		status;
+	int		status;
 	SceUID	start_id( -1 );
 	SceUID	load_id( LoadModule( module, partition ) );
 

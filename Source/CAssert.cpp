@@ -204,7 +204,7 @@ bool	CAssert::AssertMessage( const char * fmt, ... )
 //**********************************************************************************
 //
 //**********************************************************************************
-void	CAssert::DisplayErrorCode( int code )
+void	CAssert::DisplayErrorCode( unsigned int code )
 {
 	switch ( code )
 	{
