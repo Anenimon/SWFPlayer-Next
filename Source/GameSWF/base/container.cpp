@@ -9,7 +9,10 @@
 #include "base/container.h"
 #include "base/utf8.h"
 #include "base/tu_random.h"
-#include <stdarg.h>
+#include <stdarg.h>
+#ifndef WIN32
+#include <strings.h>
+#endif
 
 
 void tu_string::append_wide_char(uint16 c)
@@ -170,7 +173,11 @@ void tu_string::encode_utf8_from_wchar(tu_string* result, const uint16* wstr)
 
 /*static*/ int	tu_string::stricmp(const char* a, const char* b)
 {
-	return ::stricmp(a, b);}
+	#ifdef WIN32
+	return ::_stricmp(a, b);
+#else
+	return ::strcasecmp(a, b);
+#endif}
 
 
 uint32	tu_string::utf8_char_at(int index) const
