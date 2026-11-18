@@ -68,9 +68,21 @@ jobs:
               echo "=== Verificando cabecalhos libpng ==="
               find "$PSPDEV/psp" \( -name png.h -o -name pnglibconf.h \) -print
 
-              echo "=== Recompilando FFmpeg sem FAAD ==="
-              make -C third_party/ffmpeg clean || exit 1
-              make -C third_party/ffmpeg -j2 || exit 1
+              echo "=== Recompilando somente o registro de codecs ==="
+              make -C third_party/ffmpeg/libavcodec allcodecs.o || exit 1
+
+              echo "=== Removendo FAAD da biblioteca FFmpeg ==="
+              psp-ar d third_party/ffmpeg/libavcodec/libavcodec.a libfaad.o || exit 1
+              psp-ar d third_party/ffmpeg/libavcodec/libavcodec.a allcodecs.o || exit 1
+              psp-ar r third_party/ffmpeg/libavcodec/libavcodec.a third_party/ffmpeg/libavcodec/allcodecs.o || exit 1
+              psp-ranlib third_party/ffmpeg/libavcodec/libavcodec.a || exit 1
+
+              if psp-ar t third_party/ffmpeg/libavcodec/libavcodec.a | grep -q '^libfaad.o$'; then
+                echo "ERRO: libfaad.o ainda está na biblioteca."
+                exit 1
+              fi
+
+              echo "=== FAAD removido; codecs restantes preservados ==="
 
               echo "=== Compilando ==="
               make -j2
