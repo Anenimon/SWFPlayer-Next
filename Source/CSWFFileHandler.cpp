@@ -207,7 +207,7 @@ float	swf_x_offset = 0;
 float	mouse_x = 0;
 float	mouse_y = 0;
 int		mouse_buttons = 0;
-s32		movie_version = 0;
+int		movie_version = 0;
 
 //**********************************************************************************
 //   Static Variables
