@@ -1958,7 +1958,7 @@ namespace gameswf
 			if ( frame_num < m_Frames.size() )
 			{
 				sVideoFrame frame( m_Frames[ frame_num ] );
-				s32			frameFinished( 0 );
+				int			frameFinished( 0 );
 				u32			bytesRemaining( frame.m_nSize );
 				u8 *		p_video_data( frame.m_pData );
 
