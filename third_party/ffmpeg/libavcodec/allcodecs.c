@@ -24,6 +24,7 @@
  * Provides registration of all codecs, parsers and bitstream filters for libavcodec.
  */
 
+#include "../config.h"
 #include "allcodecs.h"
 
 #define REGISTER_ENCODER(X,x) \
