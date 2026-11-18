@@ -12,7 +12,6 @@
 #include "gameswf_timers.h"
 #include "gameswf_xml.h"
 
-using namespace std;
 
 namespace gameswf 
 {
