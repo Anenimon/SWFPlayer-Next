@@ -34,7 +34,7 @@
 //   Include Files
 //**********************************************************************************
 #include "CConfigFile.h"
-#include "TinyXML.h"
+#include "tinyxml.h"
 #include "CFrameWork.h"
 #include "CFileSystem.h"
 
