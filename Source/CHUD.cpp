@@ -34,6 +34,7 @@
 //   Include Files
 //**********************************************************************************
 #include "CHUD.h"
+#include <psprtc.h>
 #include "CFrameWork.h"
 #include "CRenderable.h"
 #include "CGfx.h"
@@ -280,7 +281,7 @@ void	CHUD::RenderInternal()
 	//
 	//	Display the current time and date
 	//
-	pspTime		time;
+	ScePspDateTime time;
 	CString		date;
 	CString		half( "am" );
 	const V2	date_time_pos( CSkinManager::GetV2( "hud", "date_time_pos", V2( 4.f, 4.f ) ) );
