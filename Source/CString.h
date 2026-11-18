@@ -38,6 +38,9 @@
 //**********************************************************************************
 #include "CTypes.h"
 #include "CAssert.h"
+#ifndef WIN32
+#include <strings.h>
+#endif
 
 //**********************************************************************************
 //   Macros
@@ -93,7 +96,11 @@ inline s32 StringCompare( const char * a, const char * b )
 
 inline s32 StringCompareI( const char * a, const char * b )
 {
-	return strcmpi( a, b );
+	#ifdef WIN32
+	return _stricmp( a, b );
+#else
+	return strcasecmp( a, b );
+#endif
 }
 
 inline const char * StringFind( const char * source, char c )
