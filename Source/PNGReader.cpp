@@ -37,6 +37,7 @@
 #include "CTextureManager.h"
 #include "CFileSystem.h"
 #include <png.h>
+#include <stdlib.h>
 
 //**********************************************************************************
 //   Local Macros
@@ -65,116 +66,133 @@
 //*************************************************************************************
 //
 //*************************************************************************************
-CTexture *	CTextureManager::ReadPNG( CFile * const p_file )
+CTexture * CTextureManager::ReadPNG( CFile * const p_file )
 {
-	const size_t	nSigSize( 8 );
-	u8				signature[ nSigSize ];
-	CTexture *		p_texture( NULL );
+    const size_t sig_size = 8;
+    png_byte signature[sig_size];
 
-	if ( p_file->Read( signature, sizeof( u8 ) * nSigSize ) == false )
-	{
-		return NULL;
-	}
+    if (p_file->Read(signature, sig_size) == false)
+        return NULL;
 
-	if ( png_check_sig( signature, nSigSize ) == false )
-	{
-		return NULL;
-	}
+    if (png_sig_cmp(signature, 0, sig_size) != 0)
+        return NULL;
 
-	png_struct *	pPngStruct( png_create_read_struct( PNG_LIBPNG_VER_STRING, NULL, NULL, NULL ) );
+    png_structp png_ptr = png_create_read_struct(
+        PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
-	if ( pPngStruct == NULL)
-	{
-		return NULL;
-	}
+    if (png_ptr == NULL)
+        return NULL;
 
-	png_info *	pPngInfo( png_create_info_struct( pPngStruct ) );
+    png_infop info_ptr = png_create_info_struct(png_ptr);
 
-	if ( pPngInfo == NULL )
-	{
-		png_destroy_read_struct( &pPngStruct, NULL, NULL );
+    if (info_ptr == NULL)
+    {
+        png_destroy_read_struct(&png_ptr, NULL, NULL);
+        return NULL;
+    }
 
-		return NULL;
-	}
+    if (setjmp(png_jmpbuf(png_ptr)))
+    {
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        return NULL;
+    }
 
-	if ( setjmp( pPngStruct->jmpbuf ) != 0 )
-	{
-		png_destroy_read_struct( &pPngStruct, NULL, NULL );
+    png_init_io(png_ptr, *p_file);
+    png_set_sig_bytes(png_ptr, sig_size);
 
-		return NULL;
-	}
+    png_read_info(png_ptr, info_ptr);
 
-	png_init_io( pPngStruct, *p_file );
-	png_set_sig_bytes( pPngStruct, nSigSize );
-	png_read_png( pPngStruct, pPngInfo, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_BGR, NULL );
+    png_uint_32 width, height;
+    int bit_depth, color_type, interlace_type;
+    int compression_type, filter_type;
 
-	png_uint_32 width = pPngInfo->width;
-	png_uint_32 height = pPngInfo->height;
-	int color_type = pPngInfo->color_type;
+    png_get_IHDR(png_ptr, info_ptr, &width, &height,
+        &bit_depth, &color_type, &interlace_type,
+        &compression_type, &filter_type);
 
-	png_byte **pRowTable = pPngInfo->row_pointers;
-	unsigned char r=0, g=0, b=0, a=0;
+    bool has_alpha =
+        (color_type & PNG_COLOR_MASK_ALPHA) != 0 ||
+        png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS) != 0;
 
-	p_texture = new CTexture();
+    if (bit_depth == 16)
+        png_set_strip_16(png_ptr);
 
-	if ( p_texture != NULL )
-	{
-		if ( p_texture->Init( GU_PSM_8888, width, height ) == false )
-		{
-			SAFE_DELETE( p_texture );
-		}
-		else
-		{
-			u8 *	p_dest( p_texture->m_pBuffer );
+    png_set_packing(png_ptr);
+    png_set_expand(png_ptr);
 
-			for ( u32 y = 0; y < height; ++y )
-			{
-				const png_byte *	pRow( pRowTable[ y ] );
+    if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+        png_set_tRNS_to_alpha(png_ptr);
 
-				for ( u32 x = 0; x < width; ++x )
-				{
-					switch ( color_type )
-					{
-					case PNG_COLOR_TYPE_GRAY:
-						r = g = b = *pRow++;
-						if ( r == 0 && g == 0 && b == 0 )	a = 0x00;
-						else								a = 0xff;
-						break;
-					case PNG_COLOR_TYPE_GRAY_ALPHA:
-						r = g = b = *pRow++;
-						if ( r == 0 && g == 0 && b == 0 )	a = 0x00;
-						else								a = 0xff;
-						pRow++;
-						break;
-					case PNG_COLOR_TYPE_RGB:
-						b = *pRow++;
-						g = *pRow++;
-						r = *pRow++;
-						if ( r == 0 && g == 0 && b == 0 )	a = 0x00;
-						else								a = 0xff;
-						break;
-					case PNG_COLOR_TYPE_RGB_ALPHA:
-						b = *pRow++;
-						g = *pRow++;
-						r = *pRow++;
-						a = *pRow++;
-						break;
-					}
+    png_set_gray_to_rgb(png_ptr);
 
-					p_dest[ ( x << 2 ) + 0 ] = r;
-					p_dest[ ( x << 2 ) + 1 ] = g;
-					p_dest[ ( x << 2 ) + 2 ] = b;
-					p_dest[ ( x << 2 ) + 3 ] = a;
-				}
+    if (!has_alpha)
+        png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
 
-				p_dest += ( p_texture->m_nCanvasWidth << 2 );
-			}
-		}
-	}
+    png_set_interlace_handling(png_ptr);
+    png_read_update_info(png_ptr, info_ptr);
 
-	png_destroy_read_struct( &pPngStruct, &pPngInfo, NULL );
+    png_size_t rowbytes = png_get_rowbytes(png_ptr, info_ptr);
 
-	return p_texture;
+    png_bytep image_data = (png_bytep)malloc(rowbytes * height);
+    png_bytep *rows = (png_bytep *)malloc(sizeof(png_bytep) * height);
+
+    if (image_data == NULL || rows == NULL)
+    {
+        free(image_data);
+        free(rows);
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+        return NULL;
+    }
+
+    for (png_uint_32 y = 0; y < height; ++y)
+        rows[y] = image_data + y * rowbytes;
+
+    png_read_image(png_ptr, rows);
+    png_read_end(png_ptr, info_ptr);
+
+    png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+
+    CTexture *p_texture = new CTexture();
+
+    if (p_texture != NULL)
+    {
+        if (p_texture->Init(GU_PSM_8888, width, height) == false)
+        {
+            SAFE_DELETE(p_texture);
+        }
+        else
+        {
+            u8 *p_dest = p_texture->m_pBuffer;
+
+            for (png_uint_32 y = 0; y < height; ++y)
+            {
+                const png_byte *row = rows[y];
+
+                for (png_uint_32 x = 0; x < width; ++x)
+                {
+                    u8 r = row[x * 4 + 0];
+                    u8 g = row[x * 4 + 1];
+                    u8 b = row[x * 4 + 2];
+                    u8 a = row[x * 4 + 3];
+
+                    if (!has_alpha && r == 0 && g == 0 && b == 0)
+                        a = 0;
+
+                    p_dest[x * 4 + 0] = r;
+                    p_dest[x * 4 + 1] = g;
+                    p_dest[x * 4 + 2] = b;
+                    p_dest[x * 4 + 3] = a;
+                }
+
+                p_dest += p_texture->m_nCanvasWidth * 4;
+            }
+        }
+    }
+
+    free(rows);
+    free(image_data);
+
+    return p_texture;
 }
 
 //*******************************  END OF FILE  ************************************
