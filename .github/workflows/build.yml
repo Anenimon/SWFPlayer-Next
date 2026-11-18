@@ -68,6 +68,10 @@ jobs:
               echo "=== Verificando cabecalhos libpng ==="
               find "$PSPDEV/psp" \( -name png.h -o -name pnglibconf.h \) -print
 
+              echo "=== Recompilando FFmpeg sem FAAD ==="
+              make -C third_party/ffmpeg clean || exit 1
+              make -C third_party/ffmpeg -j2 || exit 1
+
               echo "=== Compilando ==="
               make -j2
             '
