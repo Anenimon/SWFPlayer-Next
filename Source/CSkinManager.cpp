@@ -38,7 +38,7 @@
 #include "CFont.h"
 #include "CFrameWork.h"
 #include "CGfx.h"
-#include "TinyXML.h"
+#include "tinyxml.h"
 
 //**********************************************************************************
 //   Local Macros
