@@ -63,7 +63,7 @@ jobs:
               export PATH="$PSPDEV/bin:$PATH"
 
               echo "=== Instalando dependencias para compilacao ==="
-              psp-pacman -Sy --noconfirm sdl-mixer libpng || exit 1
+              psp-pacman -Sy --noconfirm sdl-mixer libpng libvorbis libogg pspirkeyb || exit 1
 
               echo "=== Verificando cabecalhos libpng ==="
               find "$PSPDEV/psp" \( -name png.h -o -name pnglibconf.h \) -print

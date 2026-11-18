@@ -11,8 +11,10 @@
 #include "gameswf.h"
 #include "gameswf_styles.h"
 #include "gameswf_dlist.h"
+extern "C" {
 #include <avcodec.h>
 #include <avformat.h>
+}
 
 namespace gameswf
 {

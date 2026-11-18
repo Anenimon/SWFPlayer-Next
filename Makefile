@@ -157,6 +157,10 @@ EXTERN_LIBS :=				-ljpeg \
 							-lpng \
 							-lSDL_mixer \
 							-lSDL \
+							-lpspirkeyb \
+							-lvorbisfile \
+							-lvorbis \
+							-logg \
 							-lmad \
 							-lavformat \
                                                      -lavcodec \
