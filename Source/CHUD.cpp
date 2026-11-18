@@ -296,9 +296,9 @@ void	CHUD::RenderInternal()
 	}
 
 //#if !defined( _DEBUG )
-	date.Printf( "%.4d/%.2d/%.2d %.2d:%.2d%s", time.year, time.month, time.day, time.hour, time.minutes, half.GetPtr() );
+	date.Printf( "%.4d/%.2d/%.2d %.2d:%.2d%s", time.year, time.month, time.day, time.hour, time.minute, half.GetPtr() );
 //#else	// #if !defined( _DEBUG )
-//	date.Printf( "%d/%d/%d %.2d:%.2d%s %d Kb free", time.year, time.month, time.day, time.hour, time.minutes, half.GetPtr(), sceKernelTotalFreeMemSize() / 1024 );
+//	date.Printf( "%d/%d/%d %.2d:%.2d%s %d Kb free", time.year, time.month, time.day, time.hour, time.minute, half.GetPtr(), sceKernelTotalFreeMemSize() / 1024 );
 //#endif	// #if !defined( _DEBUG )
 
 	CFont::GetDefaultFont()->Print(	date, date_time_pos, text_color, 1.f );
