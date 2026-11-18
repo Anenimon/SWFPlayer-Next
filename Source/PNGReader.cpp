@@ -33,11 +33,13 @@
 //**********************************************************************************
 //   Include Files
 //**********************************************************************************
+#include <png.h>
+#include <setjmp.h>
+#include <stdlib.h>
+
 #include "CFrameWork.h"
 #include "CTextureManager.h"
 #include "CFileSystem.h"
-#include <png.h>
-#include <stdlib.h>
 
 //**********************************************************************************
 //   Local Macros
