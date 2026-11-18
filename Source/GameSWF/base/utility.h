@@ -75,9 +75,9 @@ void	operator delete[](void* ptr);
 
 inline int	iabs(int i) { if (i < 0) return -i; else return i; }
 inline int	imax(int a, int b) { if (a < b) return b; else return a; }
-inline float	fmax(float a, float b) { if (a < b) return b; else return a; }
+inline float	tu_fmax(float a, float b) { if (a < b) return b; else return a; }
 inline int	imin(int a, int b) { if (a < b) return a; else return b; }
-inline float	fmin(float a, float b) { if (a < b) return a; else return b; }
+inline float	tu_fmin(float a, float b) { if (a < b) return a; else return b; }
 
 
 inline int	iclamp(int i, int min, int max) {
@@ -87,7 +87,7 @@ inline int	iclamp(int i, int min, int max) {
 
 inline float	fclamp(float f, float xmin, float xmax) {
 	QASSERT( xmin <= xmax );
-	return fmax(xmin, fmin(f, xmax));
+	return tu_fmax(xmin, tu_fmin(f, xmax));
 }
 
 inline float flerp(float a, float b, float f) { return (b - a) * f + a; }

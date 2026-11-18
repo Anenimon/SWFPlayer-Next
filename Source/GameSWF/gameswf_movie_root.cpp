@@ -78,7 +78,7 @@ namespace gameswf
 		LOG_LINE;
 		float	scale_y = m_viewport_height / TWIPS_TO_PIXELS(m_def->m_frame_size.height());
 		LOG_LINE;
-		m_pixel_scale = fmax(scale_x, scale_y);
+		m_pixel_scale = tu_fmax(scale_x, scale_y);
 	}
 
 

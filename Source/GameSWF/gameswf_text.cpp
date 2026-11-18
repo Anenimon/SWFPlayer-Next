@@ -929,7 +929,7 @@ namespace gameswf
 			text_glyph_record	rec;	// one to work on
 			rec.m_style.m_font = m_def->m_font;
 			rec.m_style.m_color = m_def->m_color;
-			rec.m_style.m_x_offset = fmax(0, m_def->m_left_margin + m_def->m_indent);
+			rec.m_style.m_x_offset = tu_fmax(0, m_def->m_left_margin + m_def->m_indent);
 			rec.m_style.m_y_offset = m_def->m_text_height
 				+ (m_def->m_font->get_leading() - m_def->m_font->get_descent()) * scale;
 			rec.m_style.m_text_height = m_def->m_text_height;
@@ -984,7 +984,7 @@ namespace gameswf
 					m_text_glyph_records.push_back(rec);
 					align_line(m_def->m_alignment, last_line_start_record, x);
 
-					x = fmax(0, m_def->m_left_margin + m_def->m_indent);	// new paragraphs get the indent.
+					x = tu_fmax(0, m_def->m_left_margin + m_def->m_indent);	// new paragraphs get the indent.
 					y += m_def->m_text_height + leading;
 
 					// Start a new record on the next line.

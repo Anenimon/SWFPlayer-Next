@@ -1,4 +1,4 @@
-// tu_types.h	-- Ignacio Castaño, Thatcher Ulrich 2003
+// tu_types.h  -- Ignacio Castaño, Thatcher Ulrich 2003
 
 // This source code has been donated to the Public Domain.  Do
 // whatever you want with it.
@@ -15,8 +15,12 @@
 #include <stdio.h>
 #include "CTypes.h"
 
+#ifdef PSP
+#include <SDL/SDL_types.h>
+#endif
 
-#if defined(__i386__) || defined(_WIN32) || defined(PSP)
+
+#if defined(__i386__) || defined(_WIN32)
 
 	// On known little-endian platforms, define this stuff.
 	#define _TU_LITTLE_ENDIAN_	1

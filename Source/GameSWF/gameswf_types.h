@@ -10,7 +10,7 @@
 #define GAMESWF_TYPES_H
 
 
-#include "gameswf/gameswf.h"
+#include "gameswf.h"
 #include "base/tu_types.h"
 
 
