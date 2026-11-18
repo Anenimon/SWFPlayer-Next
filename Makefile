@@ -134,6 +134,7 @@ INCDIR   :=					$(INCDIR) \
 							$(GAMESWF_DIR) \
 							$(TINY_XML_INCLUDE_DIR) \
 							$(SDL_INCLUDE_DIR) \
+							$(shell psp-config --psp-prefix)/include \
 							$(FFMPEG_DIR) \
 							$(FFMPEG_LIB_DIR)
 
