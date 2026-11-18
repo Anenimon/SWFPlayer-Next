@@ -3835,7 +3835,7 @@ namespace gameswf
 							i += 4;
 						
 							LOG_LINE;
-							env->push(val);
+							env->push(static_cast<int>(val));
 
 							IF_VERBOSE_ACTION(log_msg("-------------- pushed int32 %d\n", val));
 						}
